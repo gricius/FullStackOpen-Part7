@@ -1,6 +1,11 @@
-# [FullStackOpen Part 7](https://fullstackopen.com/en/part7)
+[FullStackOpen Part 7 source](https://fullstackopen.com/en/part7)
 
-# 7.1: routed anecdotes, step1
+[Part 7 Exercises main folder](https://github.com/gricius/FullStackOpen-Part7)
+
+
+
+# Exercises 7.1 - 7.6
+## 7.1: routed anecdotes, step1
 Add React Router to the application so that by clicking links in the Menu component the view can be changed.
 
 At the root of the application, meaning the path /, show the list of anecdotes:
@@ -13,7 +18,7 @@ The creation of a new anecdote should happen e.g. in the path create:
 
 ![footer](https://fullstackopen.com/static/c393db40b64e8eadd1220bdfccc8eede/5a190/41.png)
 
-# 7.2: routed anecdotes, step2
+## 7.2: routed anecdotes, step2
 Implement a view for showing a single anecdote:
 
 ![show sinlgle anecdote](https://fullstackopen.com/static/3287ad77ebb90dfac2d734d9801b20b0/5a190/42.png)
@@ -22,14 +27,14 @@ Navigating to the page showing the single anecdote is done by clicking the name 
 
 ![show single anecdote](https://fullstackopen.com/static/116f966d64a03287b86a6e6a03f6ba81/5a190/43.png)
 
-# 7.3: routed anecdotes, step3
+## 7.3: routed anecdotes, step3
 The default functionality of the creation form is quite confusing because nothing seems to be happening after creating a new anecdote using the form.
 
 Improve the functionality such that after creating a new anecdote the application transitions automatically to showing the view for all anecdotes and the user is shown a notification informing them of this successful creation for the next five seconds:
 
 ![add notification function](https://fullstackopen.com/static/7640caca8b2a611c4f6203f343b996f9/5a190/44.png)
 
-# 7.4: anecdotes and hooks step1
+## 7.4: anecdotes and hooks step1
 Simplify the anecdote creation form of your application with the useField custom hook we defined earlier.
 
 One natural place to save the custom hooks of your application is in the /src/hooks/index.js file.
@@ -73,7 +78,7 @@ const App = () => {
 }
 ```
 
-# 7.5: anecdotes and hooks step2
+## 7.5: anecdotes and hooks step2
 Add a button to the form that you can use to clear all the input fields:
 
 ![reset button](https://fullstackopen.com/static/1bce1cdac08279ba132f61a614900b94/5a190/61ea.png)
@@ -86,7 +91,7 @@ Depending on your solution, you may see the following warning in your console:
 
 We will return to this warning in the next exercise.
 
-# 7.6: anecdotes and hooks step3
+## 7.6: anecdotes and hooks step3
 If your solution did not cause a warning to appear in the console, you have already finished this exercise.
 
 If you see the warning in the console, make the necessary changes to get rid of the Invalid value for prop `reset` on <input> tag console warning.
