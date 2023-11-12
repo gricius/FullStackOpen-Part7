@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import axios from 'axios'
 
 const useField = (type) => {
@@ -11,14 +11,26 @@ const useField = (type) => {
   return {
     type,
     value,
-    onChange
+    onChange,
   }
 }
 
 const useCountry = (name) => {
   const [country, setCountry] = useState(null)
 
-  useEffect(() => {})
+  useEffect(() => {
+    if (name) {
+      axios
+        .get(`https://studies.cs.helsinki.fi/restcountries/api/name/${name}`)
+        .then(respnse => {
+          setCountry({ found: true, data: respnse.data })
+        })
+        .catch(() => {
+          setCountry({ found: false })
+        })
+    }
+  }, [name])
+  console.log(country)
 
   return country
 }
@@ -38,10 +50,20 @@ const Country = ({ country }) => {
 
   return (
     <div>
-      <h3>{country.data.name} </h3>
+      <h3>{country.data.name.common} </h3>
       <div>capital {country.data.capital} </div>
-      <div>population {country.data.population}</div> 
-      <img src={country.data.flag} height='100' alt={`flag of ${country.data.name}`}/>  
+      <div>population {country.data.population}</div>
+      <h3>languages</h3>
+      <ul>
+        {Object.values(country.data.languages).map(language => (
+          <li key={language}>{language}</li>
+        ))}
+      </ul>
+      <img
+        src={country.data.flags.png}
+        height="100"
+        alt={`flag of ${country.data.name.common}`}
+      />
     </div>
   )
 }
@@ -51,7 +73,7 @@ const App = () => {
   const [name, setName] = useState('')
   const country = useCountry(name)
 
-  const fetch = (e) => {
+  const fetch = e => {
     e.preventDefault()
     setName(nameInput.value)
   }
