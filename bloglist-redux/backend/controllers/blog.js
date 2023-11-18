@@ -4,7 +4,11 @@ const Blog = require('../models/blog')
 // const jwt = require('jsonwebtoken')
 
 blogsRouter.get('/', async (request, response) => {
-    const blogs = await Blog.find({}).populate('user', { username: 1, name: 1, id: 1 })
+    const blogs = await Blog.find({}).populate('user', {
+        username: 1,
+        name: 1,
+        id: 1,
+    })
     response.json(blogs)
 })
 
@@ -71,7 +75,6 @@ blogsRouter.put('/:id', async (request, response) => {
         return response.status(401).json({ error: 'User not found' })
     }
 
-
     try {
         const blog = await Blog.findById(id)
 
@@ -85,7 +88,6 @@ blogsRouter.put('/:id', async (request, response) => {
         console.error(error)
         return response.status(500).json({ error: 'Internal server error' })
     }
-}
-)
+})
 
 module.exports = blogsRouter
