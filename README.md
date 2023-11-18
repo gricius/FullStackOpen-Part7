@@ -8,4 +8,4 @@ Ref. [FullStackOpen.com Part 7](https://fullstackopen.com/en/part7)
 
 ## [Ultimate hooks - Exercise 7.8](https://github.com/gricius/FullStackOpen-Part7/tree/main/ultimate-hooks)
 
-## [extending the bloglist - Exercises 7.9.-7.21.](https://github.com/gricius/FullStackOpen-Part7/tree/main/ultimate-hooks)
+## [extending the bloglist - Exercises 7.9.-7.21.](https://github.com/gricius/FullStackOpen-Part7/tree/main/bloglist-redux)
