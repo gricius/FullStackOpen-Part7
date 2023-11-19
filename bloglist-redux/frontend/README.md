@@ -118,23 +118,23 @@ It is easy to add styles to the application as shown in part 2 using inline styl
 
 ```jsx
 const Blog = ({ blog }) => {
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: "solid",
-    borderWidth: 1,
-    marginBottom: 5,
-  };
+    const blogStyle = {
+        paddingTop: 10,
+        paddingLeft: 2,
+        border: 'solid',
+        borderWidth: 1,
+        marginBottom: 5,
+    }
 
-  return (
-    <div style={blogStyle}>
-      <div>
-        {blog.title} {blog.author}
-      </div>
-      // ...
-    </div>
-  );
-};
+    return (
+        <div style={blogStyle}>
+            <div>
+                {blog.title} {blog.author}
+            </div>
+            // ...
+        </div>
+    )
+}
 ```
 
 NB: even though the functionality implemented in this part is almost identical to the functionality provided by the Togglable component, the component can not be used directly to achieve the desired behavior. The easiest solution will be to add a state to the blog post that controls the displayed form of the blog post.
@@ -252,27 +252,27 @@ Make tests for logging in. Test both successful and unsuccessful login attempts.
 The test structure extends like so:
 
 ```jsx
-describe("Blog app", function () {
-  beforeEach(function () {
-    cy.request("POST", "http://localhost:3003/api/testing/reset");
-    // create here a user to backend
-    cy.visit("http://localhost:5173");
-  });
+describe('Blog app', function () {
+    beforeEach(function () {
+        cy.request('POST', 'http://localhost:3003/api/testing/reset')
+        // create here a user to backend
+        cy.visit('http://localhost:5173')
+    })
 
-  it("Login form is shown", function () {
-    // ...
-  });
+    it('Login form is shown', function () {
+        // ...
+    })
 
-  describe("Login", function () {
-    it("succeeds with correct credentials", function () {
-      // ...
-    });
+    describe('Login', function () {
+        it('succeeds with correct credentials', function () {
+            // ...
+        })
 
-    it("fails with wrong credentials", function () {
-      // ...
-    });
-  });
-});
+        it('fails with wrong credentials', function () {
+            // ...
+        })
+    })
+})
 ```
 
 Optional bonus exercise: Check that the notification shown with unsuccessful login is displayed red.
@@ -282,19 +282,19 @@ Optional bonus exercise: Check that the notification shown with unsuccessful log
 Make a test that verifies a logged-in user can create a new blog. The structure of the test could be as follows:
 
 ```jsx
-describe("Blog app", function () {
-  // ...
+describe('Blog app', function () {
+    // ...
 
-  describe("When logged in", function () {
-    beforeEach(function () {
-      // log in user here
-    });
+    describe('When logged in', function () {
+        beforeEach(function () {
+            // log in user here
+        })
 
-    it("A blog can be created", function () {
-      // ...
-    });
-  });
-});
+        it('A blog can be created', function () {
+            // ...
+        })
+    })
+})
 ```
 
 The test has to ensure that a new blog is added to the list of all blogs.
@@ -318,6 +318,6 @@ Make a test that checks that the blogs are ordered according to likes with the b
 This exercise is quite a bit trickier than the previous ones. One solution is to add a certain class for the element which wraps the blog's content and use the eq method to get the blog element in a specific index:
 
 ```jsx
-cy.get(".blog").eq(0).should("contain", "The title with the most likes");
-cy.get(".blog").eq(1).should("contain", "The title with the second most likes");
+cy.get('.blog').eq(0).should('contain', 'The title with the most likes')
+cy.get('.blog').eq(1).should('contain', 'The title with the second most likes')
 ```
