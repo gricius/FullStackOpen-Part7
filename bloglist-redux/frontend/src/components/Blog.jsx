@@ -2,23 +2,23 @@
 import { useState } from 'react'
 import blogService from '../services/blogs'
 import Notification from './Notification'
+import { useDispatch } from 'react-redux'
+import { notificationWithTimeout } from '../reducers/notificationReducer'
+import { useSelector } from 'react-redux'
 
 const Blog = ({ blog, user, updateBlogs }) => {
-    //console.log('user id', user.id)
-    //console.log('blog user Id', blog.user.id)
+    const dispatch = useDispatch()
     const [showDetails, setShowDetails] = useState(false)
     const [likes, setLikes] = useState(blog.likes)
     console.log('likes state:', likes)
-    const [notification, setNotification] = useState({
-        message: null,
-        type: null,
-    })
+    // const [notification, setNotification] = useState({
+    //     message: null,
+    //     type: null,
+    // })
+    const notification = useSelector((state) => state.notification)
 
     const showNotification = (message, type) => {
-        setNotification({ message, type })
-        setTimeout(() => {
-            setNotification({ message: null, type: null })
-        }, 5000)
+        dispatch(notificationWithTimeout({ message, type }))
     }
 
     const toggleDetails = () => {
@@ -38,8 +38,8 @@ const Blog = ({ blog, user, updateBlogs }) => {
                     b.id === updatedBlog.id ? updatedBlog : b
                 )
             )
-            console.log('handleLike function called')
-            console.log('Likes updated:', updatedBlog.likes)
+            // console.log('handleLike function called')
+            // console.log('Likes updated:', updatedBlog.likes)
         } catch (error) {
             console.error('Error updating likes:', error)
             showNotification('Error updating likes', 'error')
@@ -81,7 +81,7 @@ const Blog = ({ blog, user, updateBlogs }) => {
                     {showDetails ? 'Hide details' : 'Show details'}
                 </button>
             </div>
-            <Notification notification={notification} />
+            {/* <Notification notification={notification} /> */}
             {showDetails && (
                 <div className="details">
                     <div>Blog URL: {blog.url}</div>

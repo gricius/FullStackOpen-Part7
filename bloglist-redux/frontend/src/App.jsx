@@ -6,17 +6,20 @@ import loginService from './services/login'
 import Notification from './components/Notification'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
+import { useDispatch, useSelector } from 'react-redux'
+import { notificationWithTimeout } from './reducers/notificationReducer'
 
 const App = () => {
+    const dispatch = useDispatch()
     const [blogs, setBlogs] = useState([])
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [user, setUser] = useState(null)
-    const [notification, setNotification] = useState(null)
     const blogFormRef = useRef()
     const [newTitle, setNewTitle] = useState('')
     const [newAuthor, setNewAuthor] = useState('')
     const [newUrl, setNewUrl] = useState('')
+    const notification = useSelector((state) => state.notification)
 
     useEffect(() => {
         blogService.getAll().then((blogs) => {
@@ -36,11 +39,8 @@ const App = () => {
     }, [])
 
     const showNotification = (message, type) => {
-        setNotification({ message, type })
+        dispatch(notificationWithTimeout({ message, type }))
         console.log('notification type', type)
-        setTimeout(() => {
-            setNotification(null)
-        }, 5000)
     }
 
     const addBlog = (blogObject) => {
