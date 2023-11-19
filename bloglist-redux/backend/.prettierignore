@@ -1,8 +1,0 @@
-build
-coverage
-.vscode
-cypress
-node_modules
-public
-package-lock.json
-package.json
