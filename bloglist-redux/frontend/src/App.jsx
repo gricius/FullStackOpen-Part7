@@ -8,13 +8,15 @@ import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
 import { useDispatch, useSelector } from 'react-redux'
 import { notificationWithTimeout } from './reducers/notificationReducer'
+import { setUser, clearUser } from './reducers/loginReducer'
 
 const App = () => {
     const dispatch = useDispatch()
     const [blogs, setBlogs] = useState([])
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
-    const [user, setUser] = useState(null)
+    //const [user, setUser] = useState(null)
+    const user = useSelector((state) => state.login.user)
     const blogFormRef = useRef()
     const [newTitle, setNewTitle] = useState('')
     const [newAuthor, setNewAuthor] = useState('')
@@ -33,10 +35,10 @@ const App = () => {
         if (loggedUserJSON) {
             const user = JSON.parse(loggedUserJSON)
             console.log('user', user)
-            setUser(user)
+            dispatch(setUser(user)) // Use dispatch to dispatch the setUser action
             blogService.setToken(user.token)
         }
-    }, [])
+    }, [dispatch])
 
     const showNotification = (message, type) => {
         dispatch(notificationWithTimeout({ message, type }))
@@ -72,7 +74,7 @@ const App = () => {
     const handleLogout = () => {
         window.localStorage.removeItem('loggedBlogappUser')
         showNotification('Logged out', 'success')
-        setUser(null)
+        dispatch(clearUser())
     }
 
     const handleLogin = async (event) => {
@@ -89,7 +91,7 @@ const App = () => {
             )
 
             blogService.setToken(user.token)
-            setUser(user)
+            dispatch(setUser(user))
             setUsername('')
             setPassword('')
             showNotification('Logged in', 'success')
