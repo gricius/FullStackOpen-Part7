@@ -1,42 +1,36 @@
 // App.jsx
-import { useState, useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
-import loginService from './services/login'
 import Notification from './components/Notification'
 import BlogForm from './components/BlogForm'
-import Togglable from './components/Togglable'
-import { useDispatch, useSelector } from 'react-redux'
+import Login from './components/Login' // Import the new Login component
+import { initializeBlogs } from './reducers/blogReducer'
+import { setUser, clearUser } from './reducers/loginReducer' // Ensure you have clearUser action
+
 import { notificationWithTimeout } from './reducers/notificationReducer'
-import { setUser, clearUser } from './reducers/loginReducer'
 
 const App = () => {
     const dispatch = useDispatch()
-    const [blogs, setBlogs] = useState([])
-    const [username, setUsername] = useState('')
-    const [password, setPassword] = useState('')
-    //const [user, setUser] = useState(null)
+    const blogs = useSelector((state) => state.blogs)
     const user = useSelector((state) => state.login.user)
     const blogFormRef = useRef()
-    const [newTitle, setNewTitle] = useState('')
-    const [newAuthor, setNewAuthor] = useState('')
-    const [newUrl, setNewUrl] = useState('')
     const notification = useSelector((state) => state.notification)
 
     useEffect(() => {
-        blogService.getAll().then((blogs) => {
-            setBlogs(blogs)
-        })
-    }, [])
+        dispatch(initializeBlogs())
+        //console.log('dispatched initializeBlogs()', blogs)
+    }, [dispatch])
 
     useEffect(() => {
         const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
-        console.log('loggedUserJSON', loggedUserJSON)
         if (loggedUserJSON) {
             const user = JSON.parse(loggedUserJSON)
-            console.log('user', user)
-            dispatch(setUser(user)) // Use dispatch to dispatch the setUser action
+            dispatch(setUser(user))
             blogService.setToken(user.token)
+        } else {
+            dispatch(clearUser())
         }
     }, [dispatch])
 
@@ -45,123 +39,42 @@ const App = () => {
         console.log('notification type', type)
     }
 
-    const addBlog = (blogObject) => {
-        blogFormRef.current.toggleVisibility()
-        blogService
-            .create(blogObject)
-            .then((returnedBlog) => {
-                setBlogs(blogs.concat(returnedBlog))
-                setNewTitle('')
-                setNewAuthor('')
-                setNewUrl('')
-                showNotification('Blog added by ' + user.name, 'success')
-                console.log(returnedBlog)
-            })
-            .catch((exception) => {
-                showNotification(
-                    'Error: All fields are mandatory. Please retry',
-                    'error'
-                )
-            })
-    }
-
-    const blogForm = () => (
-        <Togglable buttonLabel="new blog" ref={blogFormRef}>
-            <BlogForm createBlog={addBlog} />
-        </Togglable>
-    )
-
     const handleLogout = () => {
         window.localStorage.removeItem('loggedBlogappUser')
         showNotification('Logged out', 'success')
         dispatch(clearUser())
     }
 
-    const handleLogin = async (event) => {
-        event.preventDefault()
-        try {
-            const user = await loginService.login({
-                username,
-                password,
-            })
-
-            window.localStorage.setItem(
-                'loggedBlogappUser',
-                JSON.stringify(user)
-            )
-
-            blogService.setToken(user.token)
-            dispatch(setUser(user))
-            setUsername('')
-            setPassword('')
-            showNotification('Logged in', 'success')
-        } catch (exception) {
-            showNotification('wrong credentials', 'error')
-
-            console.log('wrong credentials', exception)
-        }
-    }
-
-    const updateBlogs = (updatedBlogs) => {
-        setBlogs(updatedBlogs)
-    }
-
-    if (user === null) {
-        return (
-            <div>
-                <h2>Log in to application</h2>
-                {notification && <Notification notification={notification} />}
-                <form onSubmit={handleLogin}>
-                    <div>
-                        username
-                        <input
-                            className="username"
-                            type="text"
-                            value={username}
-                            name="Username"
-                            onChange={({ target }) => setUsername(target.value)}
-                        />
-                    </div>
-                    <div>
-                        password
-                        <input
-                            className="password"
-                            type="password"
-                            value={password}
-                            name="Password"
-                            onChange={({ target }) => setPassword(target.value)}
-                        />
-                    </div>
-                    <button className="login-button" type="submit">
-                        Log in
-                    </button>
-                </form>
-            </div>
-        )
-    }
+    console.log('Blogs in component:', blogs)
 
     return (
         <div>
-            <h2>blogs</h2>
+            {user === null ? (
+                <Login />
+            ) : (
+                <div>
+                    <h2>blogs</h2>
 
-            {notification && <Notification notification={notification} />}
+                    {notification && (
+                        <Notification notification={notification} />
+                    )}
 
-            <p>
-                {user.name} logged in
-                <button onClick={handleLogout}>Logout</button>
-            </p>
-            {blogForm()}
-            {blogs
-                .sort((a, b) => b.likes - a.likes)
-                .map((blog) => (
-                    <Blog
-                        key={blog.id}
-                        blog={blog}
-                        url={blog.url}
-                        user={user}
-                        updateBlogs={updateBlogs}
-                    />
-                ))}
+                    <p>
+                        {user.name} logged in
+                        <button onClick={handleLogout}>Logout</button>
+                    </p>
+                    <BlogForm user={user} blogFormRef={blogFormRef} />
+                    {blogs && blogs.length > 0 ? (
+                        [...blogs] // Create a copy of the blogs array
+                            .sort((a, b) => b.likes - a.likes) // Now sort the copy
+                            .map((blog) => (
+                                <Blog key={blog.id} blog={blog} user={user} />
+                            ))
+                    ) : (
+                        <p>Loading blogs...</p>
+                    )}
+                </div>
+            )}
         </div>
     )
 }

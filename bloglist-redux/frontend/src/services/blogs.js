@@ -6,6 +6,7 @@ let token = null
 
 const setToken = (newToken) => {
     token = `Bearer ${newToken}`
+    console.log('in service blogs token set to:', token)
 }
 
 const getAll = () => {
@@ -17,9 +18,14 @@ const create = async (newObject) => {
     const config = {
         headers: { Authorization: token },
     }
-
+    console.log(
+        'Service: rin create, newObject and config (token)',
+        newObject,
+        config
+    )
     const response = await axios.post(baseUrl, newObject, config)
     return response.data
+    console.log('respnse in service create', response)
 }
 
 // put request to update likes
@@ -27,6 +33,7 @@ const updateLikes = async (id, newObject) => {
     const config = {
         headers: { Authorization: token },
     }
+    console.log('in updateLikes, id and config (token)', id, config)
 
     const response = await axios.put(`${baseUrl}/${id}`, newObject, config)
     return response.data

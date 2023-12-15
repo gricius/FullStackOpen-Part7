@@ -1,7 +1,10 @@
+// loginReducer.js
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
     user: null,
+    username: '',
+    password: '',
 }
 
 const loginSlice = createSlice({
@@ -9,17 +12,21 @@ const loginSlice = createSlice({
     initialState,
     reducers: {
         setUser(state, action) {
-            return {
-                user: action.payload,
-            }
+            state.user = action.payload
         },
         clearUser(state) {
-            return {
-                user: null,
-            }
+            state.user = null
+        },
+        setUsername(state, action) {
+            state.username = action.payload
+        },
+        setPassword(state, action) {
+            state.password = action.payload
         },
     },
 })
 
-export const { setUser, clearUser } = loginSlice.actions
+export const { setUser, clearUser, setUsername, setPassword } =
+    loginSlice.actions
+
 export default loginSlice.reducer

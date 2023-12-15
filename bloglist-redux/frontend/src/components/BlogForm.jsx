@@ -1,61 +1,59 @@
 // ../components/BlogForm.jsx
-import React, { useState } from 'react'
+//import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { createBlog } from '../reducers/blogReducer'
+import { notificationWithTimeout } from '../reducers/notificationReducer'
+import Togglable from './Togglable'
 
-const BlogForm = ({ createBlog }) => {
-    const [newBlog, setNewBlog] = useState({ title: '', author: '', url: '' })
+const BlogForm = ({ user, blogFormRef }) => {
+    const dispatch = useDispatch()
 
-    const addBlog = (event) => {
+    const showNotification = (message, type) => {
+        dispatch(notificationWithTimeout({ message, type }))
+        console.log('notification type', type)
+    }
+
+    const creteNewBlog = (event) => {
         event.preventDefault()
-        createBlog(newBlog)
-        console.log('newBlog', newBlog)
-        setNewBlog({ title: '', author: '', url: '' })
+        const newBlog = {
+            title: event.target.title.value,
+            author: event.target.author.value,
+            url: event.target.url.value,
+        }
+        console.log('newBlog and user', newBlog, user)
+
+        try {
+            dispatch(createBlog({ ...newBlog, user }))
+            showNotification('Blog added by ' + user, 'success')
+            event.target.title.value = ''
+            event.target.author.value = ''
+            event.target.url.value = ''
+            //blogFormRef.current.toggleVisibility()
+        } catch (exception) {
+            showNotification('Blog could not be added', 'error')
+            console.log(exception)
+        }
     }
 
     return (
-        <div>
-            <h2>Create New Blog</h2>
-            <form onSubmit={addBlog}>
-                <div>
-                    Title:
-                    <input
-                        className="title"
-                        type="text"
-                        name="Title"
-                        value={newBlog.title}
-                        onChange={(e) =>
-                            setNewBlog({ ...newBlog, title: e.target.value })
-                        }
-                    />
-                </div>
-                <div>
-                    Author:
-                    <input
-                        className="author"
-                        type="text"
-                        name="Author"
-                        value={newBlog.author}
-                        onChange={(e) =>
-                            setNewBlog({ ...newBlog, author: e.target.value })
-                        }
-                    />
-                </div>
-                <div>
-                    URL:
-                    <input
-                        className="url"
-                        type="text"
-                        name="Url"
-                        value={newBlog.url}
-                        onChange={(e) =>
-                            setNewBlog({ ...newBlog, url: e.target.value })
-                        }
-                    />
-                </div>
-                <button className="create-button" type="submit">
-                    Save
-                </button>
-            </form>
-        </div>
+        <Togglable buttonLabel="new blog" ref={blogFormRef}>
+            <div>
+                <h2>Create new</h2>
+                <form onSubmit={creteNewBlog}>
+                    <div>
+                        Title:
+                        <input id="title" name="title" />
+                    </div>
+                    <div>
+                        Author: <input id="author" name="author" />
+                    </div>
+                    <div>
+                        Url: <input id="url" name="url" />
+                    </div>
+                    <button type="submit">Create</button>
+                </form>
+            </div>
+        </Togglable>
     )
 }
 
