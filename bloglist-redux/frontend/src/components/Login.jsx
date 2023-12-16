@@ -1,8 +1,14 @@
 // Login.jsx
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { setUser, setUsername, setPassword } from '../reducers/loginReducer'
+import {
+    setUser,
+    setUsername,
+    setPassword,
+    initializeUser,
+} from '../reducers/loginReducer'
 import loginService from '../services/login'
+import { notificationWithTimeout } from '../reducers/notificationReducer'
 
 const Login = () => {
     const dispatch = useDispatch()
@@ -18,6 +24,15 @@ const Login = () => {
                 JSON.stringify(user)
             )
             dispatch(setUser(user))
+            dispatch(
+                notificationWithTimeout({
+                    message: 'Logged in',
+                    type: 'success',
+                })
+            )
+            dispatch(initializeUser())
+            // dispatch(initializeBlogs())
+            //console.log('Service handleLogin user: ', user)
             dispatch(setUsername(''))
             dispatch(setPassword(''))
         } catch (exception) {

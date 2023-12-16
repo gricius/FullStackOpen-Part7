@@ -7,10 +7,10 @@ import Togglable from './Togglable'
 
 const BlogForm = ({ user, blogFormRef }) => {
     const dispatch = useDispatch()
-
+    //console.log('user in BlogForm', user)
     const showNotification = (message, type) => {
         dispatch(notificationWithTimeout({ message, type }))
-        console.log('notification type', type)
+        // console.log('notification type', type)
     }
 
     const creteNewBlog = (event) => {
@@ -20,15 +20,15 @@ const BlogForm = ({ user, blogFormRef }) => {
             author: event.target.author.value,
             url: event.target.url.value,
         }
-        console.log('newBlog and user', newBlog, user)
+        //console.log('newBlog and user', newBlog, user)
 
         try {
             dispatch(createBlog({ ...newBlog, user }))
-            showNotification('Blog added by ' + user, 'success')
+            showNotification('Blog added by ' + user.name, 'success')
             event.target.title.value = ''
             event.target.author.value = ''
             event.target.url.value = ''
-            //blogFormRef.current.toggleVisibility()
+            blogFormRef.current.toggleVisibility()
         } catch (exception) {
             showNotification('Blog could not be added', 'error')
             console.log(exception)

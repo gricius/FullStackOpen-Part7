@@ -31,7 +31,7 @@ export const initializeBlogs = () => {
         try {
             const blogs = await blogService.getAll()
             dispatch(setBlogs(blogs))
-            console.log('Blogs initialized', blogs)
+            //console.log('Blogs initialized', blogs)
         } catch (error) {
             console.log('Error initializing blogs:', error.message)
         }
@@ -44,7 +44,7 @@ export const createBlog = (blog) => {
             const token = getState().login.token
             const newBlog = await blogService.create(blog, token)
             dispatch(addBlog(newBlog))
-            console.log('Blog created:', newBlog)
+            //console.log('Blog created:', newBlog)
         } catch (error) {
             console.log('Error creating blog:', error.message)
         }
@@ -62,11 +62,14 @@ export const deleteBlog = (id) => {
     }
 }
 
-export const likeBlog = (id) => {
+export const likeBlog = (blog) => {
     return async (dispatch) => {
+        const likes = { ...blog, likes: blog.likes + 1 }
+        const id = blog.id
+        //console.log('in likeBlog, likes:', likes, 'id:', id)
         try {
-            const blogToLike = await blogService.updateLikes(id)
-            dispatch(addLike(blogToLike.id))
+            await blogService.updateLikes(likes)
+            dispatch(addLike(id))
         } catch (error) {
             console.log('Error liking blog:', error.message)
         }
