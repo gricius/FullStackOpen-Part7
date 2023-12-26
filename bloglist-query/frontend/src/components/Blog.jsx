@@ -1,7 +1,10 @@
 // ../components/Blog.jsx
 import { useState } from 'react'
 import blogService from '../services/blogs'
-import { useNotification, setNotification } from '../NotificationContext'
+import {
+    useNotification,
+    setNotification,
+} from '../contexts/NotificationContext'
 const Blog = ({ blog, user, updateBlogs }) => {
     const [showDetails, setShowDetails] = useState(false)
     const [likes, setLikes] = useState(blog.likes)

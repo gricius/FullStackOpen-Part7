@@ -1,8 +1,8 @@
 import React from 'react'
-import { useNotification } from '../NotificationContext'
+import { useNotification } from '../contexts/NotificationContext'
 
 const Notification = () => {
-    const { state } = useNotification() 
+    const { state } = useNotification()
     const { message, type } = state
 
     const notificationStyle = {

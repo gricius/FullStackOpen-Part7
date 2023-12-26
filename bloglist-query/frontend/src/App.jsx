@@ -6,7 +6,10 @@ import loginService from './services/login'
 import Notification from './components/Notification'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
-import { useNotification, setNotification } from './NotificationContext'
+import {
+    useNotification,
+    setNotification,
+} from './contexts/NotificationContext'
 
 const App = () => {
     const [blogs, setBlogs] = useState([])
